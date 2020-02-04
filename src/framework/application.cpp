@@ -22,7 +22,8 @@ Application::Application(const char* caption, int width, int height)
     this->size = 10;
     this->ux = 0;
     this->uy = 0;
-    this->line = false;
+    this->lineDDL = false;
+    this->lineB = false;
     this->circle = false;
     this->rectangle = false;
     this->im = new Image(window_width, window_height);
@@ -40,62 +41,7 @@ void Application::init(void)
 //render one frame
 void Application::render(void)
 {
-    if (key==1){
-        im->loadTGA("hazard.tga");
-        im->flipY();
-        im->scale(window_width, window_height);
-        for( unsigned int x = 0; x < framebuffer->width; x++)
-        {
-            for (unsigned int y = 0; y < framebuffer->height; y++){
-                Color c = im->getPixel(x*0.1,y*0.1);
-                framebuffer->setPixelSafe(x, y, c);
-            }
-        }
-    }
-	
-    else if (key==0){
-        framebuffer->loadTGA("hazard.tga");
-		framebuffer->flipX();
-		framebuffer->flipY();
-        
-        //fill every pixel of the image with some random data
-		if (keystate[SDL_SCANCODE_G]) {
-			for (unsigned int x = 0; x < framebuffer->width; x++)
-			{
-				for (unsigned int y = 0; y < framebuffer->height; y++)
-				{
-					Color c = framebuffer->getPixel(x, y);
-					Color grey;
-					grey.r = c.r * 0.2989;
-					grey.g = c.g * 0.5870;
-					grey.b = c.b * 0.1140;
-					float g = (grey.r + grey.g + grey.b);
-					grey.r = g;
-					grey.g = g;
-					grey.b = g;
-					framebuffer->setPixel(x, y, grey);
-				}
-			}
 
-		}
-		
-		if (keystate[SDL_SCANCODE_I])
-		{
-			for (unsigned int x = 0; x < framebuffer->width; x++)
-			{
-				for (unsigned int y = 0; y < framebuffer->height; y++)
-				{
-					Color c = framebuffer->getPixel(x, y);
-					Color invert;
-					invert.r = 255-c.r;
-					invert.g = 255-c.g;
-					invert.b = 255-c.b;
-					framebuffer->setPixel(x, y, invert);
-				}
-			}
-		}
-    }
-    
     //send image to screen*/
     showImage( framebuffer );
 }
@@ -212,10 +158,11 @@ void Application::onMouseButtonDown( SDL_MouseButtonEvent event )
 {
 	if (event.button == SDL_BUTTON_LEFT) //left mouse pressed
 	{
-        if (key == 2){
+        if (key == 0){
             if(keystate[SDL_SCANCODE_X])
             {
-                line = true;
+                lineDDL = true;
+                lineB = false;
                 circle = false;
                 rectangle = false;
                 ux = mouse_position.x;
@@ -223,8 +170,9 @@ void Application::onMouseButtonDown( SDL_MouseButtonEvent event )
             }
             else if (keystate[SDL_SCANCODE_C])
             {
-                circle = true;
-                line = false;
+                lineB = true;
+                circle = false;
+                lineDDL = false;
                 rectangle = false;
                 ux = mouse_position.x;
                 uy = mouse_position.y;
@@ -232,14 +180,16 @@ void Application::onMouseButtonDown( SDL_MouseButtonEvent event )
             else if (keystate[SDL_SCANCODE_V])
             {
                 circle = false;
-                line = false;
+                lineDDL = false;
+                lineB = false;
                 rectangle = true;
                 ux = mouse_position.x;
                 uy = mouse_position.y;
             }
             else
             {
-                line = false;
+                lineDDL = false;
+                lineB = false;
                 circle = false;
                 rectangle = false;
                 framebuffer->setPixel(mouse_position.x, mouse_position.y, Color(0,255,0));
@@ -253,11 +203,15 @@ void Application::onMouseButtonUp( SDL_MouseButtonEvent event )
 {
 	if (event.button == SDL_BUTTON_LEFT) //left mouse unpressed
 	{
-        if (key == 2){
+        if (key == 0){
             framebuffer->setPixel(mouse_position.x, mouse_position.y, Color(255,0,0));
             
-            if((ux!=mouse_position.x || uy != mouse_position.y)&&(line == true)){
-                framebuffer->drawLine(ux, uy, mouse_position.x, mouse_position.y, c);
+            if((ux!=mouse_position.x || uy != mouse_position.y)&&(lineDDL == true)){
+                framebuffer->drawLineDDL(ux, uy, mouse_position.x, mouse_position.y, c);
+            }
+
+            if((ux!=mouse_position.x || uy != mouse_position.y)&&(lineB == true)){
+                framebuffer->drawLineB(ux, uy, mouse_position.x, mouse_position.y, c);
             }
                 
             if((ux!=mouse_position.x || uy != mouse_position.y)&&(circle == true))

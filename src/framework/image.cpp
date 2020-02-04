@@ -130,10 +130,10 @@ void Image::clearImage()
 //draw Rectangle
 void Image::drawRectangle( int x, int y, int w, int h, Color color)
 {
-    drawLine(x, y, x+w, y, color);
+    /*drawLine(x, y, x+w, y, color);
     drawLine(x, y+h, x+w, y+h, color);
     drawLine(x, y, x, y+h, color);
-    drawLine(x+w, y, x+w, y+h, color);
+    drawLine(x+w, y, x+w, y+h, color);*/
 }
 
 void Image::drawCircle( int x, int y, long r, Color color)
@@ -153,39 +153,89 @@ void Image::drawCircle( int x, int y, long r, Color color)
     }
 }
 
-//draw Line using equation y = gradient*x + n
-void Image::drawLine( int x1, int y1, int x2, int y2, Color color)
-{
-    float gradient, n, y;
-    
-    if ((x1 > x2) || (y1 > y2)){
-        int tx = x1;
-        x1 = x2;
-        x2 = tx;
-        
-        int ty = y1;
-        y1 = y2;
-        y2 = ty;
+// Function that returns the sign of the input integer number
+int sgn (int x){
+    if (x < 0){
+        return -1;
     }
-    
-    float dx = x2 - x1;
-    float dy = y2 - y1;
-    
-    if (dx == 0)
-    {
-        for (int j=y1; j<y2; j++){
-            setPixel(x1, j, color);
-        }
-    }
-    gradient = dy/dx;
-    n = y1 - (gradient * x1);
-    
-    for(int x=x1; x<x2; x++)
-    {
-        y = gradient * x + n;
-        setPixel(x,y,color);
+    else{
+        return 1;
     }
 }
+
+
+//draw Line using DDL
+void Image::drawLineDDL( int x1, int y1, int x2, int y2, Color color)
+{
+    float d, x, y;
+    float dx = (x2-x1);
+    float dy = (y2-y1);
+    if ( fabs(dx) >= fabs(dy) )
+        d = fabs(dx);
+    else
+        d = fabs(dy);
+    float vx = dx / d;
+    float vy = dy / d;
+    x = x1+sgn(x1)*0.5;
+    y = y1+sgn(y1)*0.5;
+    for (int i = 0; i <= d; i++)
+        {
+            setPixel(x,y,color);
+            x = x + vx;
+            y = y + vy;
+        }
+}
+
+
+//draw Line using B !!! CAMBIAR UN POCO PORQUE SE PARECE A UNO DE INTERNET !!!
+void Image::drawLineB( int x0, int y0, int x1, int y1, Color color)
+{
+    int dx, dy, inc_E, inc_NE, d, x, y;
+
+    dx = x1-x0;
+    dy = y1-y0;
+    ////////////////////////////////////////
+    int dx1 = sgn(dx), dy1 = sgn(dy), dx2 = sgn(dx), dy2 = 0 ;
+
+    int A = abs(dx);
+    int B = abs(dy);
+
+    if (A <= B){
+        A = B;
+        B = abs(dx);
+        if (dy != 0){
+            dy2 = sgn(dy);
+        }
+        dx2 = 0;
+    }
+
+    ////////////////////////////////////////
+
+
+
+
+    inc_E = 2*dy;
+    inc_NE = 2*(dy-dx);
+    d = 2*dy-dx;
+    x = x0;
+    y = y0;
+    setPixel( x, y, color );
+    while (x < x1)
+    {
+        if (d <= 0) { //Choose E
+            d = d + inc_E;
+            x = x + 1;
+        }
+        else { //Choose NE
+            d = d + inc_NE;
+            x = x + 1;
+            y = y + 1;
+        }
+        setPixel(x, y, color);
+    }
+
+}
+
 
 //Loads an image from a TGA file
 bool Image::loadTGA(const char* filename)

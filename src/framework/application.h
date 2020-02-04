@@ -15,7 +15,7 @@ public:
     //Global variables declaration
     Color c;
     int key, ux, uy, rad, size;
-    bool line, circle, rectangle;
+    bool lineDDL,lineB, circle, rectangle;
 
 	//window
 	SDL_Window* window;

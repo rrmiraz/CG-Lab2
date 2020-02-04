@@ -66,7 +66,8 @@ public:
     
     void drawRectangle( int x, int y, int w, int h, Color color); //Draw Rectangle
     void drawCircle( int x, int y, long r, Color color); //Draw Circle
-    void drawLine( int x1, int y1, int x2, int y2, Color color); //Draw Line
+    void drawLineDDL( int x1, int y1, int x2, int y2, Color color); //Draw Line using DDL
+    void drawLineB( int x1, int y1, int x2, int y2, Color color); //Draw Line using Bresenham
 
 	//fill the image with the color C
 	void fill(const Color& c) { for(unsigned int pos = 0; pos < width*height; ++pos) pixels[pos] = c; }
