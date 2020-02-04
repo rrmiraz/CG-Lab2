@@ -1,4 +1,3 @@
-
 #include "utils.h"
 
 #ifdef WIN32
@@ -138,10 +137,7 @@ void launchLoop(Application* app)
 			// Clear the window and the depth buffer
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			//call render function
-			app->render( app->framebuffer );
-
-			//send to GPU
-			sendFramebufferToScreen(&app->framebuffer);
+			app->render();
 			//swap between front buffer and back buffer to show it 
 			SDL_GL_SwapWindow(app->window);
 
@@ -200,7 +196,7 @@ void launchLoop(Application* app)
 	return;
 }
 
-void sendFramebufferToScreen( Image* img )
+void showImage( Image* img )
 {
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1 );
 	glDrawPixels(img->width, img->height, GL_RGB, GL_UNSIGNED_BYTE, img->pixels);

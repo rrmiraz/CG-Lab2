@@ -10,6 +10,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <iostream>
+//#include <graphics.h>
 #include "framework.h"
 
 //remove unsafe warnings
@@ -60,6 +61,12 @@ public:
 	
 	void flipY(); //flip the image top-down
 	void flipX(); //flip the image left-right
+    
+    void clearImage();
+    
+    void drawRectangle( int x, int y, int w, int h, Color color); //Draw Rectangle
+    void drawCircle( int x, int y, long r, Color color); //Draw Circle
+    void drawLine( int x1, int y1, int x2, int y2, Color color); //Draw Line
 
 	//fill the image with the color C
 	void fill(const Color& c) { for(unsigned int pos = 0; pos < width*height; ++pos) pixels[pos] = c; }
@@ -70,6 +77,7 @@ public:
 	//save or load images from the hard drive
 	bool loadTGA(const char* filename);
 	bool saveTGA(const char* filename);
+
 
 	//used to easy code
 	#ifndef IGNORE_LAMBDAS

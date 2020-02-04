@@ -17,7 +17,7 @@ bool checkGLErrors();
 SDL_Window* createWindow(const char* caption, int width, int height);
 void launchLoop(Application* app);
 
-void sendFramebufferToScreen(Image* img);
+void showImage(Image* img);
 
 //fast random generator
 inline unsigned long frand(void) {          //period 2^96-1

@@ -12,12 +12,17 @@
 class Application
 {
 public:
+    //Global variables declaration
+    Color c;
+    int key, ux, uy, rad, size;
+    bool line, circle, rectangle;
+
 	//window
 	SDL_Window* window;
+    Image *framebuffer;
+    Image *im;
 	float window_width;
 	float window_height;
-
-	Image framebuffer;
 
 	float time;
 
@@ -34,7 +39,7 @@ public:
 
 	//main methods
 	void init( void );
-	void render( Image& framebuffer );
+	void render( void );
 	void update( double dt );
 
 	//methods for events
@@ -48,7 +53,6 @@ public:
 		glViewport( 0,0, width, height );
 		this->window_width = width;
 		this->window_height = height;
-		framebuffer.resize(width,height);
 	}
 
 	Vector2 getWindowSize()

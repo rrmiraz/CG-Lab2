@@ -117,6 +117,75 @@ void Image::flipY()
 		}
 }
 
+//Clear the image
+void Image::clearImage()
+{
+    for (int i=0; i<width; i++){
+        for (int j=0; j<height; j++){
+            setPixelSafe(i, j, Color(0,0,0));
+        }
+    }
+}
+
+//draw Rectangle
+void Image::drawRectangle( int x, int y, int w, int h, Color color)
+{
+    drawLine(x, y, x+w, y, color);
+    drawLine(x, y+h, x+w, y+h, color);
+    drawLine(x, y, x, y+h, color);
+    drawLine(x+w, y, x+w, y+h, color);
+}
+
+void Image::drawCircle( int x, int y, long r, Color color)
+{
+    for(int i = 0; i < 360; i++)
+    {
+        double x1 = x + r*sin(i);
+        double y1 = y + r*cos(i);
+        if (x1 > 0 && x1 < width && y1 > 0 && y1 < height)
+        {
+            setPixel(x1, y1, color);
+        }
+        else
+        {
+            continue;
+        }
+    }
+}
+
+//draw Line using equation y = gradient*x + n
+void Image::drawLine( int x1, int y1, int x2, int y2, Color color)
+{
+    float gradient, n, y;
+    
+    if ((x1 > x2) || (y1 > y2)){
+        int tx = x1;
+        x1 = x2;
+        x2 = tx;
+        
+        int ty = y1;
+        y1 = y2;
+        y2 = ty;
+    }
+    
+    float dx = x2 - x1;
+    float dy = y2 - y1;
+    
+    if (dx == 0)
+    {
+        for (int j=y1; j<y2; j++){
+            setPixel(x1, j, color);
+        }
+    }
+    gradient = dy/dx;
+    n = y1 - (gradient * x1);
+    
+    for(int x=x1; x<x2; x++)
+    {
+        y = gradient * x + n;
+        setPixel(x,y,color);
+    }
+}
 
 //Loads an image from a TGA file
 bool Image::loadTGA(const char* filename)
