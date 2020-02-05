@@ -295,7 +295,7 @@ void Image::drawLineB( int x0, int y0, int x1, int y1, Color color)
 }
 
 
-//Loads an image from a TGA file
+//Loads an image from a TGA fil
 bool Image::loadTGA(const char* filename)
 {
 	unsigned char TGAheader[12] = {0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0};
