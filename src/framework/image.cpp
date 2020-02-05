@@ -224,49 +224,73 @@ int computeOctant(int x0, int y0, int x1, int y1){
 void Image::drawLineB( int x0, int y0, int x1, int y1, Color color)
 {
     int dx, dy, inc_E, inc_NE, d, x, y, temp,mx = 1, my = 1;
-    int octant = computeOctant(x0,y0,x1,y1);
-    switch (octant){
-        case 1:
-            break;
-        case 2:
-            break;
-        case 3:
-            break;
-        case 4:
-            break;
-        case 5:
-            break;
-        case 6:
-            break;
-        case 7:
-            break;
-        case 8:
-            my = -1;
-            break;
 
-    }
-    dx = x1-x0;
-    dy = y1-y0;
-    inc_E = 2*dy;
-    inc_NE = 2*(dy-dx);
-    d = 2*dy-dx;
-    x = x0;
-    y = y0;
-
-    setPixel( x, y, color );
-    while (x < x1)
-    {
-        if (d <= 0) { //Choose E
-            d = d + inc_E;
-            x = (x + mx);
-        }
-        else { //Choose NE
-            d = d + inc_NE;
-            x = x + 1;
-            y = (y + my);
+    dx = abs(x1-x0);
+    dy = abs(y1-y0);
+    if (dx<dy){
+        inc_E = 2*dx;
+        inc_NE = 2*(dx-dy);
+        d = 2*dx-dy;
+        x = x0;
+        y = y0;
+        if (y0>y1){
+            x = x1;
+            y = y1;
+            y1 = y0;
+            x1 = x0;
         }
         setPixel(x, y, color);
+
+        while (y < y1)
+        {
+            if (d <= 0) { //Choose E
+                d = d + inc_E;
+            }
+            else { //Choose NE
+                if (x>x1){
+                    x = x-1;
+                }
+                else{
+                    x = x+1;
+                }
+                d = d + inc_NE;
+            }
+            y = y + 1;
+            setPixel(x, y, color);
+        }
     }
+    else{
+        inc_E = 2*dy;
+        inc_NE = 2*(dy-dx);
+        d = 2*dy-dx;
+        x = x0;
+        y = y0;
+        if (x0>x1){
+            x = x1;
+            y = y1;
+            x1 = x0;
+            y1 = y0;
+        }
+        setPixel(x, y, color);
+        while (x < x1)
+        {
+            if (d <= 0) { //Choose E
+                d = d + inc_E;
+            }
+            else { //Choose NE
+                if (y<y1){
+                    y = y+1;
+                }
+                else{
+                    y = y-1;
+                }
+                d = d + inc_NE;
+            }
+            x = x + 1;
+            setPixel(x, y, color);
+        }
+    }
+
 
 }
 
