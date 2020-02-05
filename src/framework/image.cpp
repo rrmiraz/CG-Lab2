@@ -185,7 +185,7 @@ void Image::drawLineDDL( int x1, int y1, int x2, int y2, Color color)
             y = y + vy;
         }
 }
-
+//hola
 int computeOctant(int x0, int y0, int x1, int y1){
     if(x0<x1 && y0<y1){
         if(abs(x1-x0) < abs(y1-y0)){
