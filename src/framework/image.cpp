@@ -136,22 +136,52 @@ void Image::drawRectangle( int x, int y, int w, int h, Color color)
     drawLine(x+w, y, x+w, y+h, color);*/
 }
 
-void Image::drawCircle( int x, int y, long r, Color color)
+void Image::drawCircle( int ux, int uy, int r,  Color c)
 {
-    for(int i = 0; i < 360; i++)
-    {
-        double x1 = x + r*sin(i);
-        double y1 = y + r*cos(i);
-        if (x1 > 0 && x1 < width && y1 > 0 && y1 < height)
-        {
-            setPixel(x1, y1, color);
+    int x, y; int v;
+        x=0;
+        y=r;
+        v=1-r;
+        setPixel(x, y, c);
+        while (y > x){
+            if ( v < 0) {
+                v=v+2*x+3;
+                x++;
+            }
+            else {
+                v=v+2*(x-y)+5;
+                x++;
+                y--;
+            }
+
+            for( int i = -x; i <= x; i++){
+                setPixel(i + ux, y + uy, c);
+                setPixel(-i + ux, -y + uy, c);
+            }
+
+            for( int i = -y; i <= y; i++){
+                setPixel(i + ux, x + uy, c);
+                setPixel(-i + ux, -x + uy, c);
+                setPixel(-i + ux, 0 + uy, c);
+            }
+
+
+
+
+
+            setPixel(x + ux, y + uy, c);
+            setPixel(y + ux, x + uy, c);
+            setPixel((-x + ux), y + uy, c);
+            setPixel((-y + ux), x + uy, c);
+
+
+            setPixel(-x + ux, -y + uy, c);
+            setPixel(-y + ux, -x + uy, c);
+            setPixel((x + ux), -y + uy, c);
+            setPixel((y + ux), -x + uy, c);
         }
-        else
-        {
-            continue;
-        }
-    }
 }
+
 
 // Function that returns the sign of the input integer number
 int sgn (int x){

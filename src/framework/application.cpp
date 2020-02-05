@@ -179,10 +179,10 @@ void Application::onMouseButtonDown( SDL_MouseButtonEvent event )
             }
             else if (keystate[SDL_SCANCODE_V])
             {
-                circle = false;
+                circle = true;
                 lineDDL = false;
                 lineB = false;
-                rectangle = true;
+                rectangle = false;
                 ux = mouse_position.x;
                 uy = mouse_position.y;
             }

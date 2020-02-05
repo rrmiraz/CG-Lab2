@@ -65,7 +65,7 @@ public:
     void clearImage();
     
     void drawRectangle( int x, int y, int w, int h, Color color); //Draw Rectangle
-    void drawCircle( int x, int y, long r, Color color); //Draw Circle
+    void drawCircle( int x, int y, int r, Color c); //Draw Circle
     void drawLineDDL( int x1, int y1, int x2, int y2, Color color); //Draw Line using DDL
     void drawLineB( int x1, int y1, int x2, int y2, Color color); //Draw Line using Bresenham
 
