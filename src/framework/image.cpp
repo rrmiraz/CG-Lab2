@@ -12,6 +12,7 @@ Image::Image(unsigned int width, unsigned int height)
 	this->height = height;
 	pixels = new Color[width*height];
 	memset(pixels, 0, width * height * sizeof(Color));
+	int minmax[height][2];
 }
 
 //copy constructor
@@ -185,7 +186,7 @@ void Image::drawLineDDL( int x1, int y1, int x2, int y2, Color color)
             y = y + vy;
         }
 }
-//hola
+
 int computeOctant(int x0, int y0, int x1, int y1){
     if(x0<x1 && y0<y1){
         if(abs(x1-x0) < abs(y1-y0)){
@@ -220,7 +221,7 @@ int computeOctant(int x0, int y0, int x1, int y1){
         }
     }
 }
-//draw Line using B !!! CAMBIAR UN POCO PORQUE SE PARECE A UNO DE INTERNET !!!
+//draw Line using B
 void Image::drawLineB( int x0, int y0, int x1, int y1, Color color)
 {
     int dx, dy, inc_E, inc_NE, d, x, y, temp,mx = 1, my = 1;
@@ -292,6 +293,37 @@ void Image::drawLineB( int x0, int y0, int x1, int y1, Color color)
     }
 
 
+}
+void Image::drawLineDDLTriangle( int x1, int y1, int x2, int y2, Color color)
+{
+    float d, x, y;
+    float dx = (x2-x1);
+    float dy = (y2-y1);
+    int minX = 999999;
+    int maxX = -999999;
+    if ( fabs(dx) >= fabs(dy) )
+        d = fabs(dx);
+    else
+        d = fabs(dy);
+    float vx = dx / d;
+    float vy = dy / d;
+    x = x1+sgn(x1)*0.5;
+    y = y1+sgn(y1)*0.5;
+    for (int i = 0; i <= d; i++)
+    {
+        setPixel(x,y,color);
+        x = x + vx;
+        y = y + vy;
+        minX = min(x,minX);
+        maxX = max(x,maxX);
+
+    }
+}
+
+void Image::drawTriangle(int x0, int y0, int x1, int y1, int x2, int y2, Color & c, bool fill){
+    drawLineDDLTriangle( x1, y1, x2, y2, c);
+    drawLineDDLTriangle( x0, y0, x2, y2, c);
+    drawLineDDLTriangle( x0, y0, x1, y1, c);
 }
 
 

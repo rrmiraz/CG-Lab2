@@ -9,7 +9,9 @@ Application::Application(const char* caption, int width, int height)
 	// initialize attributes
 	// Warning: DO NOT CREATE STUFF HERE, USE THE INIT 
 	// things create here cannot access opengl
-	int w,h;
+	int points[2][3];
+	int w, h;
+	int count = 0;
 	SDL_GetWindowSize(window,&w,&h);
 
 	this->window_width = w;
@@ -25,7 +27,7 @@ Application::Application(const char* caption, int width, int height)
     this->lineDDL = false;
     this->lineB = false;
     this->circle = false;
-    this->rectangle = false;
+    this->triangle = false;
     this->im = new Image(window_width, window_height);
 }
 
@@ -164,7 +166,7 @@ void Application::onMouseButtonDown( SDL_MouseButtonEvent event )
                 lineDDL = true;
                 lineB = false;
                 circle = false;
-                rectangle = false;
+                triangle = false;
                 ux = mouse_position.x;
                 uy = mouse_position.y;
             }
@@ -173,7 +175,7 @@ void Application::onMouseButtonDown( SDL_MouseButtonEvent event )
                 lineB = true;
                 circle = false;
                 lineDDL = false;
-                rectangle = false;
+                triangle = false;
                 ux = mouse_position.x;
                 uy = mouse_position.y;
             }
@@ -182,22 +184,33 @@ void Application::onMouseButtonDown( SDL_MouseButtonEvent event )
                 circle = false;
                 lineDDL = false;
                 lineB = false;
-                rectangle = true;
+                triangle = true;
                 ux = mouse_position.x;
                 uy = mouse_position.y;
+            }
+            else if (keystate[SDL_SCANCODE_T])
+            {
+                circle = false;
+                lineDDL = false;
+                lineB = false;
+                triangle = true;
+                ux = mouse_position.x;
+                uy = mouse_position.y;
+
+                }
             }
             else
             {
                 lineDDL = false;
                 lineB = false;
                 circle = false;
-                rectangle = false;
+                triangle = false;
                 framebuffer->setPixel(mouse_position.x, mouse_position.y, Color(0,255,0));
             }
         }
 	}
     
-}
+
 
 void Application::onMouseButtonUp( SDL_MouseButtonEvent event )
 {
@@ -219,14 +232,24 @@ void Application::onMouseButtonUp( SDL_MouseButtonEvent event )
                 rad = sqrt((ux-mouse_position.x)*(ux-mouse_position.x)+(uy-mouse_position.y)*(uy-mouse_position.y));
                 framebuffer->drawCircle(ux, uy, rad, c);
             }
-            if((ux!=mouse_position.x || uy != mouse_position.y)&&(rectangle == true)){
-                int w = mouse_position.x - ux;
-                int h = mouse_position.y - uy;
-                framebuffer->drawRectangle(ux, uy, w, h, c);
+            if((triangle == true)){
+                if (count<3) {
+                    points[0][count] = ux;
+                    points[1][count] = uy;
+                    count++;
+                    printf("%d",count);
+                }
+                if (count==3){
+                    framebuffer->drawTriangle(points[0][0],points[1][0],points[0][1],points[1][1],points[0][2],points[1][2], c,true);
+                    count = 0;
+                }
+
+
             }
         }
     }
 }
+
 
 //when the app starts
 void Application::start()
