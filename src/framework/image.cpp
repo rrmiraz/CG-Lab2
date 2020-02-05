@@ -186,50 +186,84 @@ void Image::drawLineDDL( int x1, int y1, int x2, int y2, Color color)
         }
 }
 
-
+int computeOctant(int x0, int y0, int x1, int y1){
+    if(x0<x1 && y0<y1){
+        if(abs(x1-x0) < abs(y1-y0)){
+            return 2;
+        }
+        else{
+            return 1;
+        }
+    }
+    else if (x0<x1 && y0>y1){
+        if(abs(x1-x0) < abs(y1-y0)){
+            return 7;
+        }
+        else{
+            return 8;
+        }
+    }
+    else if(x0>x1 && y0>y1){
+        if(abs(x1-x0) < abs(y1-y0)){
+            return 6;
+        }
+        else{
+            return 5;
+        }
+    }
+    else if (x0>x1 && y0<y1){
+        if(abs(x1-x0) < abs(y1-y0)){
+            return 3;
+        }
+        else{
+            return 4;
+        }
+    }
+}
 //draw Line using B !!! CAMBIAR UN POCO PORQUE SE PARECE A UNO DE INTERNET !!!
 void Image::drawLineB( int x0, int y0, int x1, int y1, Color color)
 {
-    int dx, dy, inc_E, inc_NE, d, x, y;
+    int dx, dy, inc_E, inc_NE, d, x, y, temp,mx = 1, my = 1;
+    int octant = computeOctant(x0,y0,x1,y1);
+    switch (octant){
+        case 1:
+            break;
+        case 2:
+            break;
+        case 3:
+            break;
+        case 4:
+            break;
+        case 5:
+            break;
+        case 6:
+            break;
+        case 7:
+            break;
+        case 8:
+            my = -1;
+            break;
 
+    }
     dx = x1-x0;
     dy = y1-y0;
-    ////////////////////////////////////////
-    int dx1 = sgn(dx), dy1 = sgn(dy), dx2 = sgn(dx), dy2 = 0 ;
-
-    int A = abs(dx);
-    int B = abs(dy);
-
-    if (A <= B){
-        A = B;
-        B = abs(dx);
-        if (dy != 0){
-            dy2 = sgn(dy);
-        }
-        dx2 = 0;
-    }
-
-    ////////////////////////////////////////
-
-
-
-
     inc_E = 2*dy;
     inc_NE = 2*(dy-dx);
     d = 2*dy-dx;
     x = x0;
     y = y0;
+
     setPixel( x, y, color );
     while (x < x1)
     {
         if (d <= 0) { //Choose E
             d = d + inc_E;
-            x = x + 1;
+            x = (x + mx);
         }
         else { //Choose NE
             d = d + inc_NE;
             x = x + 1;
-            y = y + 1;
+            y = (y + my);
         }
         setPixel(x, y, color);
     }
