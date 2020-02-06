@@ -1,7 +1,7 @@
 #include "application.h"
 #include "utils.h"
 #include "image.h"
-
+//
 Application::Application(const char* caption, int width, int height)
 {
 	this->window = createWindow(caption, width, height);
