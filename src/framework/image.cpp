@@ -12,7 +12,6 @@ Image::Image(unsigned int width, unsigned int height)
 	this->height = height;
 	pixels = new Color[width*height];
 	memset(pixels, 0, width * height * sizeof(Color));
-	int minmax[height][2];
 }
 
 //copy constructor
@@ -299,8 +298,6 @@ void Image::drawLineDDLTriangle( int x1, int y1, int x2, int y2, Color color)
     float d, x, y;
     float dx = (x2-x1);
     float dy = (y2-y1);
-    int minX = 999999;
-    int maxX = -999999;
     if ( fabs(dx) >= fabs(dy) )
         d = fabs(dx);
     else
@@ -314,8 +311,6 @@ void Image::drawLineDDLTriangle( int x1, int y1, int x2, int y2, Color color)
         setPixel(x,y,color);
         x = x + vx;
         y = y + vy;
-        minX = min(x,minX);
-        maxX = max(x,maxX);
 
     }
 }
