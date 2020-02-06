@@ -69,7 +69,7 @@ public:
     void drawLineDDL( int x1, int y1, int x2, int y2, Color color); //Draw Line using DDL
     void drawLineB( int x1, int y1, int x2, int y2, Color color); //Draw Line using Bresenham
     void drawTriangle(int x0, int y0, int x1, int y1, int x2, int y2, Color & c, bool fill);
-    void drawLineDDLTriangle( int x1, int y1, int x2, int y2, Color color);
+    void drawLineDDLTriangle( int x1, int y1, int x2, int y2, Color color, int x_values[]);
 
 
     //fill the image with the color C
