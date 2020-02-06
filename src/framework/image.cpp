@@ -127,14 +127,7 @@ void Image::clearImage()
     }
 }
 
-//draw Rectangle
-void Image::drawRectangle( int x, int y, int w, int h, Color color)
-{
-    /*drawLine(x, y, x+w, y, color);
-    drawLine(x, y+h, x+w, y+h, color);
-    drawLine(x, y, x, y+h, color);
-    drawLine(x+w, y, x+w, y+h, color);*/
-}
+
 
 void Image::drawCircle( int ux, int uy, int r,  Color c)
 {
@@ -322,6 +315,114 @@ void Image::drawLineB( int x0, int y0, int x1, int y1, Color color)
     }
 
 
+}
+void Image::drawLineDDLTriangle(int x1, int y1, int x2, int y2, Color color, int x_values[]) {
+
+    float d, x, y;
+    float dx = (x2 - x1);
+    float dy = (y2 - y1);
+    if (fabs(dx) >= fabs(dy))
+        d = fabs(dx);
+    else
+        d = fabs(dy);
+    float vx = dx / d;
+    float vy = dy / d;
+    x = x1 + sgn(x1) * 0.5;
+    y = y1 + sgn(y1) * 0.5;
+    for (int i = 0; i <= d; i++) {
+        setPixel(x, y, color);
+        x = x + vx;
+        y = y + vy;
+        x_values[int(y)] = x;
+
+
+    }
+}
+
+int maximum(int x1, int x2, int x3) {
+    if (x1 > x2) {
+        return std::max(x1, x3);
+    } else {
+        return std::max(x2, x3);
+    }
+}
+
+int minimum(int x1, int x2, int x3) {
+    if (x1 < x2) {
+        return std::min(x1, x3);
+    } else {
+        return std::min(x2, x3);
+    }
+}
+
+
+void Image::drawTriangle(int x0, int y0, int x1, int y1, int x2, int y2, Color &c, bool fill) {
+
+
+    int minmax[2][this->height];
+    int x_values[this->height];
+    int x_values2[this->height];
+    int x_values3[this->height];
+    for (int i = 0; i < this->height; i++) {
+        x_values[i] = NULL;
+        x_values2[i] = NULL;
+        x_values3[i] = NULL;
+    }
+
+    drawLineDDLTriangle(x1, y1, x2, y2, c, x_values);
+    drawLineDDLTriangle(x0, y0, x2, y2, c, x_values2);
+    drawLineDDLTriangle(x0, y0, x1, y1, c, x_values3);
+
+    for (int i = 0; i < this->height; i++) {
+        if (x_values[i] == NULL) {
+            if (x_values2[i] == NULL) {
+                if (x_values3[i] == NULL) {
+                    minmax[0][i] = 999999;
+                    minmax[1][i] = -999999;
+                } else {
+                    minmax[0][i] = x_values3[i];
+                    minmax[1][i] = x_values3[i];
+                }
+            } else {
+                if (x_values3[i] == NULL) {
+                    minmax[0][i] = x_values2[i];
+                    minmax[1][i] = x_values2[i];
+                } else {
+                    minmax[0][i] = maximum(x_values2[i], x_values2[i], x_values3[i]);
+                    minmax[1][i] = minimum(x_values2[i], x_values2[i], x_values3[i]);
+                }
+
+            }
+        } else {
+            if (x_values2[i] == NULL) {
+                if (x_values3[i] == NULL) {
+                    minmax[0][i] = x_values[i];
+                    minmax[1][i] = x_values[i];
+                } else {
+                    minmax[0][i] = maximum(x_values[i], x_values[i], x_values3[i]);
+                    minmax[1][i] = minimum(x_values[i], x_values[i], x_values3[i]);
+                }
+            } else {
+                if (x_values3[i] == NULL) {
+                    minmax[0][i] = maximum(x_values[i], x_values[i], x_values2[i]);
+                    minmax[1][i] = minimum(x_values[i], x_values[i], x_values2[i]);
+                } else {
+                    minmax[0][i] = maximum(x_values[i], x_values2[i], x_values3[i]);
+                    minmax[1][i] = minimum(x_values[i], x_values2[i], x_values3[i]);
+                }
+
+            }
+        }
+    }
+
+    for (int i = 0; i < this->height; i++) {
+        if (minmax[0][i] != 999999 && minmax[1][i] != -999999) {
+            for (int j = minmax[0][i]; j > minmax[1][i]; j--) {
+
+                setPixel(j, i, c);
+            }
+        }
+    }
 }
 
 
